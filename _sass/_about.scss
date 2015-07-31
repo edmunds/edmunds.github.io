@@ -1,0 +1,33 @@
+.about {
+    border: 1px solid #336699;
+    border-radius: .15rem;
+    overflow: hidden;
+    padding: 0;
+
+    .about-header {
+        background-color: white;
+        border-bottom: 1px solid #336699;
+        color: #336699;
+        padding: .5rem 1rem;
+        margin: 0;
+        font-size: 18px;
+        letter-spacing: .125rem;
+    }
+
+    .about-text {
+        padding: 1rem;
+        font-size: 16px;
+        text-align: justify;
+    }
+
+    .logo {
+        margin: -10px auto 0;
+    }
+
+    @media (max-width: $breakpoint-medium) {
+        .logo {
+            display: none;
+        }
+    }
+
+}

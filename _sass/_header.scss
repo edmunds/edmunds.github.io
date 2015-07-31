@@ -1,0 +1,33 @@
+.header {
+    margin: 1rem auto;
+    line-height: 3rem;
+
+    .header-link {
+        display: inline-block;
+    }
+
+    .header-title {
+        display: inline;
+        color: #505050;
+        font-size: 1.25rem;
+        margin: 0 .25rem;
+    }
+
+    .logo {
+        background: white;
+        display: inline-block;
+        height: 3rem;
+        vertical-align: top;
+        width: 3rem;
+    }
+
+    .tagline {
+        font-size: .75rem;
+        font-weight: 400;
+        color: #c0c0c0;
+        letter-spacing: 0;
+        vertical-align: middle;
+    }
+}
+
+

@@ -1,0 +1,28 @@
+<head>
+	<meta charset="UTF-8">
+	<link href="http://gmpg.org/xfn/11" rel="profile">
+
+	<!-- Enable responsiveness on mobile devices-->
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<title>
+		{% if page.title == "Home" %}
+			{{ site.title }} &middot; {{ site.tagline }}
+		{% else %}
+			{{ page.title }} &middot; {{ site.title }}
+		{% endif %}
+	</title>
+
+	<!-- CSS -->
+	<link rel="stylesheet" href="{{ site.baseurl }}/styles.css">
+
+	<!-- Icons -->
+	<link rel="apple-touch-icon-precomposed" sizes="144x144" href="{{ site.baseimagesurl}}/edmunds-technology.png">
+	<link rel="shortcut icon" href="{{ site.baseimagesurl}}/favicon96.png">
+
+    <!-- Font -->
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600' rel='stylesheet' type='text/css'>
+
+	<!-- RSS -->
+	<link rel="alternate" type="application/atom+xml" title="{{ site.title }}" href="{{ site.baseurl }}/atom.xml">
+</head>

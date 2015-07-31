@@ -1,0 +1,11 @@
+#emacs backup files
+*~
+
+#generated directories
+_site
+.sass-cache
+
+#intellij files
+*.iml
+*.ipr
+*.iws

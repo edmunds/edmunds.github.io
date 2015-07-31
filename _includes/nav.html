@@ -1,0 +1,78 @@
+{% if page.isHome %}
+    {% assign selected_link_text = 'Newest' %}
+{% elsif page.tag == 'Big Data' %}
+    {% assign selected_link_text = 'Big Data' %}
+{% elsif page.tag == 'Lessons Learned' %}
+    {% assign selected_link_text = 'Lessons Learned' %}
+{% elsif page.tag == 'All Things Tech' %}
+    {% assign selected_link_text = 'All Things Tech' %}
+{% endif %}
+
+<nav class="nav">
+    <div class="flex-container">
+        <h1 class="blog-title">EDMUNDS TECH<span class="nology">NOLOGY</span></h1>
+
+        <div class="menu-collapsed">
+            <ul class="nav-container">
+                <li class="nav-link-container"><a class="nav-link no-underline" href="#">☰<span class="offscreen">Expand Menu</span></a></li>
+            </ul>
+        </div>
+
+        <ul class="menu-expanded nav-container">
+            <li class="nav-link-container">
+                {% capture href %}{{ site.baseurl }}/{% endcapture %}
+                {% include nav-link.html link_text='Newest' selected_link_text=selected_link_text href=href %}
+            </li><li class="nav-link-container">
+                {% capture href %}{{ site.baseurl }}/tag/all-things-tech/{% endcapture %}
+                {% include nav-link.html link_text='All Things Tech' selected_link_text=selected_link_text href=href link_class='all-things-tech' %}
+            </li><li class="nav-link-container">
+                {% capture href %}{{ site.baseurl }}/tag/big-data/{% endcapture %}
+                {% include nav-link.html link_text='Big Data' selected_link_text=selected_link_text href=href link_class='big-data' %}
+            </li><li class="nav-link-container">
+                {% capture href %}{{ site.baseurl }}/tag/lessons-learned/{% endcapture %}
+                {% include nav-link.html link_text='Lessons Learned' selected_link_text=selected_link_text href=href link_class='lessons-learned' %}
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<script>
+//create a namespace for re-usable functions
+var ETB = ETB || {};
+ETB.stopBubble = function(evt) {
+    if (!evt) {
+        evt = window.event;
+    }
+    evt.cancelBubble = true;
+    if (evt.stopPropagation) {
+        evt.stopPropagation();
+    }
+};
+
+//setup hide/reveal menu for small width users
+(function() {
+    var CURRENT = "current";
+    var SHOW_MENU = "show-menu";
+
+    var body = document.body;
+    var collapsedMenu = document.querySelector(".menu-collapsed");
+    var nav = document.querySelector(".nav");
+
+    collapsedMenu.addEventListener("click", menuHandler);
+
+    var isExpanded = false; //flag for the menuHandler closure
+    function menuHandler(evt) {
+        if (isExpanded) {
+            collapsedMenu.classList.remove(CURRENT);
+            nav.classList.remove(SHOW_MENU);
+            body.removeEventListener("click", menuHandler);
+        } else {
+            collapsedMenu.classList.add(CURRENT);
+            nav.classList.add(SHOW_MENU);
+            body.addEventListener("click", menuHandler);
+        }
+        isExpanded = !isExpanded;
+        ETB.stopBubble(evt);
+    }
+})();
+</script>

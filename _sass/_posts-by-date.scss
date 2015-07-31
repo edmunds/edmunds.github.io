@@ -1,0 +1,13 @@
+.posts-by-date {
+    padding: 1rem 0;
+    font-size: 16px;
+
+    .post-link {
+        display: inline-block;
+        margin-bottom: -.125rem;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        max-width: 100%;
+    }
+}

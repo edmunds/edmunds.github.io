@@ -1,0 +1,26 @@
+---
+layout: default
+title: Home
+isHome: true
+---
+
+<div class="posts">
+	{% for post in paginator.posts %}
+        {% if post.title != site.posts[0].title %}
+            {% include preview.html post=post %}
+        {% endif %}
+	{% endfor %}
+</div>
+
+<div class="pagination">
+	{% if paginator.previous_page %}
+		<a class="pagination-item newer no-underline" href="{{ paginator.previous_page_path | prepend: site.baseurl }}">Newer</a>
+	{% else %}
+		<span class="pagination-item newer">Newer</span>
+	{% endif %}
+    {% if paginator.next_page %}
+		<a class="pagination-item older no-underline" href="{{ paginator.next_page_path | prepend: site.baseurl }}">Older</a>
+	{% else %}
+		<span class="pagination-item older">Older</span>
+	{% endif %}
+</div>

@@ -1,0 +1,37 @@
+# Permalinks
+#
+# Use of `relative_permalinks` ensures post links from the index work properly.
+permalink:           pretty
+
+# Setup
+title:               The Edmunds Tech Blog
+tagline:             We &#9829; Technology
+url:                 http://technology.edmunds.com
+paginate:            6
+paginate_path:       "/:num/"
+baseurl:             ""
+baseimagesurl:       "/public/images"
+excerpt_separator:   <!--end-featured-content-->
+
+# Assets
+#
+# We specify the directory for Jekyll so we can use @imports.
+sass:
+  sass_dir:          _sass
+  style:            :compressed
+
+# About/contact
+author:
+  name:              Edmunds Technology
+
+# Additional Files To Exclude
+exclude: ["README.md"]
+
+# Custom vars
+version:             2.0.0
+github:
+  repo:              https://github.com/edmunds/edmunds.github.io
+
+# Site Map
+gems:
+  - jekyll-sitemap

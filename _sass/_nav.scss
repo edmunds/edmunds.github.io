@@ -1,0 +1,129 @@
+@import "variables";
+
+.nav {
+    background: white;
+    border-bottom: 1px solid #336699;
+
+    .flex-container {
+        flex-flow: row nowrap;
+    }
+
+    .menu-collapsed {
+        display: none;
+    }
+
+    .blog-title,
+    .nav-link {
+        color: #336699;
+        display: inline-block;
+        padding: 0 .85rem;
+        line-height: 4rem;
+        letter-spacing: .2rem;
+        font-size: .8rem;
+        .icon {
+            display: none;
+        }
+    }
+    .nav-link {
+        width: 100%;
+    }
+
+    .blog-title {
+        order: 2;
+        margin: 0;
+        text-align: right;
+        letter-spacing: .2rem;
+        font-size: 1.75rem;
+        overflow: hidden;
+        white-space: nowrap;
+    }
+
+    .nav-container {
+        background-color: white;
+        flex: 1;
+        margin-left: 0;
+        padding-left: 0;
+    }
+
+    .nav-link-container {
+        border-right: 1px #9FB8CF solid;
+        display: inline-block;
+        font-weight: 400;
+        position: relative;
+
+        &:last-of-type {
+            border-right: 0 solid;
+        }
+
+        &:hover .nav-link,
+        .selected {
+            color: #9FB8CF;
+        }
+        .tagged:after,
+        .selected:after {
+            border-left: .5rem solid transparent;
+            border-right: .5rem solid transparent;
+            border-top: .5rem solid #336699;
+            bottom: -.55rem;
+            content: '';
+            display: inline-block;
+            height: 0;
+            left: 41%;
+            position: absolute;
+            width: 0;
+        }
+    }
+
+    @media (max-width: $breakpoint-large) {
+        &.show-menu .menu-expanded {
+            display: inline-block;
+            left: 0;
+            border-bottom: 1px solid #336699;
+        }
+        .menu-expanded {
+            border-radius: 0 0 1em 0;
+            max-width: 95%;
+            overflow: hidden;
+            position: absolute;
+            transition: left .5s;
+            top: 4rem;
+            top: calc(4rem + 2px);
+        }
+        .menu-expanded .nav-link-container {
+            display: block;
+            text-align: left;
+            overflow: hidden;
+        }
+
+        .menu-expanded {
+            .icon {
+                display: inherit;
+            }
+            .nav-link-container {
+                &:last-of-type {
+                    border-right: 1px #9FB8CF solid;
+                }
+            }
+
+            border-radius: 0;
+        }
+        &:not(.show-menu) .menu-expanded {
+            left: -100%;
+        }
+
+        .menu-collapsed {
+            .nav-link-container {
+                &:last-of-type {
+                    border-right: 1px #9FB8CF solid;
+                }
+            }
+            display: inherit;
+        }
+    }
+
+    @media (max-width: $breakpoint-small) {
+        .nology {
+            display: none;
+        }
+    }
+}

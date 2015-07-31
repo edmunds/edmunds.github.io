@@ -1,0 +1,24 @@
+.footer {
+    background: #336699;
+    color: white;
+    font-size: .75rem;
+    font-weight: 400;
+    padding: 1rem;
+    text-align: center;
+
+    .copyright {
+        margin-top: .5rem;
+        text-align: center;
+    }
+
+    .footer-link {
+        display: inline-block;
+
+        a {
+            color: white;
+            display: inline;
+            padding: 0 .25rem;
+            margin: .5rem .25rem;
+        }
+    }
+}

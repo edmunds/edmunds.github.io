@@ -1,0 +1,39 @@
+{% assign primary_tag = include.post.tags[0] %}
+{% assign primary_tag_class = primary_tag | downcase | replace:' ','-' | replace:'&','and'  %}
+{% capture post_url %}{{ site.baseurl }}{{ include.post.url }}{% endcapture %}
+{% capture post_url_full %}{{ site.url }}{{post_url}}{% endcapture %}
+<article class="post-preview">
+    {% if include.post.image %}
+    <a class="preview-image-link no-underline" href="{{ post_url }}">
+        <img class="preview-image" src="{{ include.post.image }}"/>
+    </a>
+        {% assign hasImage = true %}
+    {% else %}
+        {% assign hasImage = false %}
+    {% endif %}
+    <div class="preview-main {% if hasImage == false %}no-image{% endif %}">
+        <a class="main-link no-underline no-color" href="{{ post_url }}">
+            <h1 class="post-title anchor-style">
+                {% if include.post.short-title %}
+                    {{ include.post.short-title }}
+                {% else %}
+                    {{ include.post.title }}
+                {% endif %}
+            </h1>
+            {% if include.post.summary %}
+            <div class="preview-text">
+                {{ include.post.summary }}
+                <span class="read-more anchor-style">Read More</span>
+            </div>
+            {% endif %}
+        </a>
+        <div>
+            <a class="category icon {{primary_tag_class}}" href="{{ site.baseurl }}/tag/{{ primary_tag_class }}">{{ primary_tag }}</a>
+            <time class="post-date" datetime="{{ include.post.date | date_to_xmlschema }}">{{ include.post.date | date_to_string }}</time>
+            <div class="social-container">
+                {% include social-buttons/social-buttons.html post_url_full=post_url_full %}
+            </div>
+        </div>
+
+    </div>
+</article>

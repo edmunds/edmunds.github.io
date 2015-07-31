@@ -1,0 +1,3 @@
+<a class="nav-link no-underline {% if include.selected_link_text == include.link_text %}selected{% endif %} {% if page.tags[0] == include.link_text %} tagged {% endif %}" href="{{ include.href }}">
+    <span class="{{ include.link_class }} icon"></span><span class="nav-link-text">{{ include.link_text }}</span>
+</a>

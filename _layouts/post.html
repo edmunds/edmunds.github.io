@@ -1,0 +1,37 @@
+---
+layout: default
+---
+
+<article class="post">
+	<h1 class="post-title">{{ page.title }}</h1>
+	<time datetime="{{ page.date | date_to_xmlschema }}" class="post-date">{{ page.date | date_to_string }}</time>
+	{{ content }}
+
+    <p class="clearfix">
+        {% if page.biopic %}
+            <img src="{{site.baseimagesurl}}/{{page.biopic}}" style="float: left;margin-right: 1em;max-width:12em;max-height:15em;"/>
+        {% endif %}
+
+        {% if page.bio %}
+            <i style="font-size:.75rem">
+                {{ page.bio }}
+            </i>
+        {% endif %}
+    </p>
+</article>
+
+{% if site.related_posts != empty %}
+<aside class="related">
+	<h2>Related Posts</h2>
+	<ul class="related-posts">
+		{% for post in site.related_posts limit:3 %}
+			<li>
+                <a href="{{ site.baseurl }}{{ post.url }}">
+                    {{ post.title }}
+                    <span class="related-date"><time datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date_to_string }}</time></span>
+                </a>
+			</li>
+		{% endfor %}
+	</ul>
+</aside>
+{% endif %}

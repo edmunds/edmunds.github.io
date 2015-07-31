@@ -1,0 +1,42 @@
+@import 'variables';
+
+.flex-container {
+    display: flex;
+    flex-flow: row nowrap;
+    margin: 0 auto;
+    max-width: 60rem;
+}
+.featured,
+.nav {
+    flex: 1 100%;
+}
+.container {
+    flex: 1 66%;
+    max-width: 38rem;
+    padding-left:  0;
+    padding-right: 0;
+    margin-left:  auto;
+    margin-right: auto;
+}
+.secondary-container {
+    flex: 1 34%;
+    max-width: 20rem;
+    padding-left:  1.5rem;
+    padding-right: 1.5rem;
+    margin-top: 1.75rem;
+    margin-left:  auto;
+    margin-right: auto;
+}
+
+@media (max-width: $breakpoint-medium) {
+    .flex-container {
+        flex-flow: row wrap;
+    }
+    .container {
+        max-width: none;
+    }
+    .secondary-container {
+        flex: 1 100%;
+        max-width: 100vw;
+    }
+}
