@@ -7,7 +7,7 @@ permalink:           pretty
 title:               The Edmunds Tech Blog
 tagline:             We &#9829; Technology
 url:                 http://technology.edmunds.com
-paginate:            6
+paginate:            7
 paginate_path:       "/:num/"
 baseurl:             ""
 baseimagesurl:       "/public/images"
@@ -33,5 +33,6 @@ github:
   repo:              https://github.com/edmunds/edmunds.github.io
 
 # Site Map
-gems:
+plugins:
   - jekyll-sitemap
+  - jekyll-paginate

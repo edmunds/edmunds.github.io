@@ -38,6 +38,12 @@
     }
 }
 
+// Hide these for now as most (all?) of these links are broken
+img[src^="https://"],
+img[src^="http://"] {
+  display: none;
+}
+
 // Related posts
 .related {
   padding: 0 1.25rem 1.5rem;
