@@ -11,6 +11,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 h1 {
+  font-family: 'Helvetica Neue', 'Open Sans', Helvetica, Arial, sans-serif;
   font-size: 1.5rem;
 }
 
@@ -32,6 +33,11 @@ h4, h5, h6 {
 .question-heading {
   margin-top: 1rem;
   font-size: 1rem;
+}
+
+.page-tag {
+  padding: 0 .5rem;
+  width: calc(100% - 1rem);
 }
 
 p {

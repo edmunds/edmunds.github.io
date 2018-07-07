@@ -3,14 +3,7 @@
 {% capture post_url %}{{ site.baseurl }}{{ include.post.url }}{% endcapture %}
 {% capture post_url_full %}{{ site.url }}{{post_url}}{% endcapture %}
 <article class="post-preview">
-    {% if include.post.image %}
-    <a class="preview-image-link no-underline" href="{{ post_url }}">
-        <img class="preview-image" src="{{ include.post.image }}"/>
-    </a>
-        {% assign hasImage = true %}
-    {% else %}
-        {% assign hasImage = false %}
-    {% endif %}
+    {% assign hasImage = false %}
     <div class="preview-main {% if hasImage == false %}no-image{% endif %}">
         <a class="main-link no-underline no-color" href="{{ post_url }}">
             <h1 class="post-title anchor-style">
