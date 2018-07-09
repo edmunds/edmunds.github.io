@@ -35,11 +35,11 @@ summary: This is our first post as part of a series discussing the journey of de
 <br>
 ## Prototype
 As you could see from the above instructions, the main AR components are a box (representing the parking space) and a vehicle.  Our initial goal was to build a prototype Android app that implements both of these components and the interaction between them.  The prototype was expected to do the following:
-Load vehicle model assets (meshes and textures)
-Detect floor plane
-Draw a box from user input
-Place a vehicle in the center of the box and match orientation of the box
-Detect collision between box faces (except the “floor” face) and vehicle meshes.
+* Load vehicle model assets (meshes and textures)
+* Detect floor plane
+* Draw a box from user input
+* Place a vehicle in the center of the box and match orientation of the box
+* Detect collision between box faces (except the “floor” face) and vehicle meshes.
 
 When we began working on the prototype, we used one of Google’s example projects and kept modifying it until it fit our requirements.  That way the code was separate from our Android codebase,  and we did not have to worry about making mistakes.  This decision allowed us to iterate quickly and fail fast.  The code base was very experimental, sometimes containing multiple solutions for a single problem (for the benefit of comparison).  The code architecture was fairly undefined and most of the code resided in a single class.  
 
