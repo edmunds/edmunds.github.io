@@ -10,17 +10,16 @@ isHome: true
             {% include preview.html post=post %}
         {% endif %}
 	{% endfor %}
-</div>
-
-<div class="pagination">
-	{% if paginator.previous_page %}
-		<a class="pagination-item newer no-underline" href="{{ paginator.previous_page_path | prepend: site.baseurl }}">Newer</a>
-	{% else %}
-		<span class="pagination-item newer">Newer</span>
-	{% endif %}
+  <div class="pagination">
+	  {% if paginator.previous_page %}
+		<a class="pagination-item newer no-underline" href="{{ paginator.previous_page_path | prepend: site.baseurl }}">&lt; Newer</a>
+	  {% else %}
+		<span class="pagination-item newer">&lt; Newer</span>
+	  {% endif %}
     {% if paginator.next_page %}
-		<a class="pagination-item older no-underline" href="{{ paginator.next_page_path | prepend: site.baseurl }}">Older</a>
-	{% else %}
-		<span class="pagination-item older">Older</span>
-	{% endif %}
+		<a class="pagination-item older no-underline" href="{{ paginator.next_page_path | prepend: site.baseurl }}">Older &gt;</a>
+	  {% else %}
+		<span class="pagination-item older">Older &gt;</span>
+	  {% endif %}
+  </div>
 </div>

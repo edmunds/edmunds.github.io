@@ -5,20 +5,26 @@
         {% include nav.html %}
 
         {% if page.isHome and paginator.page == 1 %}
-        <div class="flex-container">
-            <div class="featured">
-                {% assign featured_post = site.posts[0] %}
-                {% include preview-featured.html post=featured_post %}
+            {% include hero.html %}
+            <div class="flex-container">
+                <div class="featured">
+                    {% assign featured_post = site.posts[0] %}
+                    {% include preview-featured.html post=featured_post %}
+                </div>
             </div>
-        </div>
+        {% endif %}
+
+        {% if false %}
+            <div class="flex-container">
+                <header class="page-tag">
+                  <h1>{{ page.tag }}</h1>
+                </header>
+            </div>
         {% endif %}
 
         <div class="flex-container">
-            <div class="container">
-                <main>
-                    {{ content }}
-                </main>
-            </div>
+            {{ content }}
+
             <div class="secondary-container">
                 {% if page.isAbout != true %}
                     {% include about.html %}

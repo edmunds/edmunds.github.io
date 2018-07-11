@@ -2,10 +2,6 @@
 layout: default
 ---
 
-<header class="page-tag">
-    <h1>{{ page.tag }}</h1>
-</header>
-
 <div id="post-content">
     {% if site.tags[page.tag] %}
         {% for post in site.tags[page.tag] %}

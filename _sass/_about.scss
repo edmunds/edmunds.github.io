@@ -1,6 +1,5 @@
 .about {
-    border: 1px solid #336699;
-    border-radius: .15rem;
+  border: 1px solid #e6e6e6;
     overflow: hidden;
     padding: 0;
 
@@ -16,7 +15,7 @@
 
     .about-text {
         padding: 1rem;
-        font-size: 16px;
+        font-size: .825rem;
         text-align: justify;
     }
 
@@ -26,8 +25,14 @@
 
     @media (max-width: $breakpoint-medium) {
         .logo {
-            display: none;
+          width: 50%;
+          margin: -1rem 1rem 0 -1rem;
+          float: left;
         }
     }
-
+}
+@media (max-width: $breakpoint-medium) {
+  .secondary-container {
+    margin-top: 0;
+  }
 }

@@ -1,9 +1,13 @@
 .post-preview {
-    border-bottom: 1px #9FB8CF solid;
+    border-bottom: 1px #e6e6e6 solid;
     font-size: .9rem;
-    margin: 0;
-    padding: 1.75rem 1.5rem ;
-    line-height: 1.15rem;
+    margin: 0 1.5rem;
+    padding: 1.75rem 0;
+    line-height: 1.5;
+
+    &:not(.featured):last-of-type {
+      border: 0;
+    }
 
     .main-link {
         margin: 0 0 .3rem;
@@ -16,8 +20,13 @@
         line-height: 1.75rem;
     }
     .post-date {
-      color: darkgrey;
-      margin-left: .25rem;
+      color: #555;
+      display: inline-block;
+      font-size: .75rem;
+    }
+    .tag-link:after {
+      content: '\A';
+      white-space: pre-line;
     }
     .preview-image {
         float: left;
@@ -44,9 +53,7 @@
         float: right;
         text-align: right;
         vertical-align: middle;
-    }
-    .read-more {
-        margin-left: .1rem;
+        margin-right: 1rem;
     }
 
     @mixin inline-post-styles() {
@@ -69,13 +76,5 @@
 
     @media (max-width: $breakpoint-small) {
         @include inline-post-styles();
-
-        .social-container {
-            display: block;
-            float: none;
-            margin-top: .5rem;
-            text-align: left;
-            vertical-align: middle;
-        }
     }
 }

@@ -6,16 +6,18 @@ h1, h2, h3, h4, h5, h6 {
   margin-bottom: .5rem;
   font-weight: normal;
   line-height: 1.25;
-  color: #336699;
+  color: #555;
   text-rendering: optimizeLegibility;
 }
 
 h1 {
   font-family: 'Helvetica Neue', 'Open Sans', Helvetica, Arial, sans-serif;
-  font-size: 1.5rem;
+  font-size: 1.4rem;
+  font-weight: bold;
 }
 
 h2 {
+  font-family: 'Helvetica Neue', 'Open Sans', Helvetica, Arial, sans-serif;
   margin-top: 1rem;
   font-size: 1.5rem;
 }
@@ -38,6 +40,10 @@ h4, h5, h6 {
 .page-tag {
   padding: 0 .5rem;
   width: calc(100% - 1rem);
+  h1 {
+    font-weight: normal;
+    text-transform: uppercase;
+  }
 }
 
 p {

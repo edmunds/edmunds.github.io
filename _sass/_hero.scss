@@ -1,0 +1,50 @@
+@import "variables";
+
+.hero-container {
+  background-image: url('public/images/hero-1080x500.jpg');
+  background-position: 50% 50%;
+  background-repeat: no-repeat;
+  background-size: cover;
+  overflow: hidden;
+  padding-top: 34%;
+  position: relative;
+  width: 100%;
+
+  h1 {
+    position: absolute;
+    margin: 0;
+    left: 2rem;
+    bottom: -22px;
+    margin: 0;
+    color: #fff;
+    text-align: center;
+    font-size: 4rem;
+    letter-spacing: .1rem;
+    width: auto;
+  }
+}
+
+@media (max-width: $breakpoint-medium) {
+  .hero-container {
+    padding-top: 41%;
+
+    h1 {
+      font-size: 3rem;
+      bottom: -16px;
+    }
+  }
+}
+
+@media (max-width: $breakpoint-small) {
+  .hero-container {
+    padding-top: 41%;
+
+    h1 {
+      font-size: 2rem;
+      left: auto;
+      width: 100%;
+      bottom: 50%;
+      transform: translateY(50%);
+    }
+  }
+}

@@ -6,7 +6,7 @@
     {% assign hasImage = false %}
     <div class="preview-main {% if hasImage == false %}no-image{% endif %}">
         <a class="main-link no-underline no-color" href="{{ post_url }}">
-            <h1 class="post-title anchor-style">
+            <h1 class="post-title no-underline">
                 {% if include.post.short-title %}
                     {{ include.post.short-title }}
                 {% else %}
@@ -21,10 +21,10 @@
             {% endif %}
         </a>
         <div>
-            <a class="category icon {{primary_tag_class}}" href="{{ site.baseurl }}/tag/{{ primary_tag_class }}">{{ primary_tag }}</a>
-            <time class="post-date" datetime="{{ include.post.date | date_to_xmlschema }}">{{ include.post.date | date_to_string }}</time>
+            <a class="tag-link" href="{{ site.baseurl }}/tag/{{ primary_tag_class }}">{{ primary_tag }}</a>
+            <time class="post-date" datetime="{{ include.post.date | date_to_xmlschema }}">{{ include.post.date | date: '%B %d, %Y' }}</time>
             <div class="social-container">
-                {% include social-buttons/social-buttons.html post_url_full=post_url_full %}
+              {% include social-buttons/social-buttons.html post_url_full=post_url_full %}
             </div>
         </div>
 
