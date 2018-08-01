@@ -26,7 +26,6 @@
 
 @media (max-width: $breakpoint-medium) {
   .hero-container {
-    background-image: url('public/images/hero-md.jpg');
     padding-top: 41%;
 
     h1 {
@@ -38,7 +37,6 @@
 
 @media (max-width: $breakpoint-small) {
   .hero-container {
-    background-image: url('public/images/hero-sm.jpg');
     padding-top: 41%;
 
     h1 {
