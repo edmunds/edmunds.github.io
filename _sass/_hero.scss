@@ -1,7 +1,7 @@
 @import "variables";
 
 .hero-container {
-  background-image: url('public/images/hero-1080x500.jpg');
+  background-image: url('public/images/hero-lg.jpg');
   background-position: 50% 50%;
   background-repeat: no-repeat;
   background-size: cover;
@@ -26,6 +26,7 @@
 
 @media (max-width: $breakpoint-medium) {
   .hero-container {
+    background-image: url('public/images/hero-md.jpg');
     padding-top: 41%;
 
     h1 {
@@ -37,6 +38,7 @@
 
 @media (max-width: $breakpoint-small) {
   .hero-container {
+    background-image: url('public/images/hero-sm.jpg');
     padding-top: 41%;
 
     h1 {
