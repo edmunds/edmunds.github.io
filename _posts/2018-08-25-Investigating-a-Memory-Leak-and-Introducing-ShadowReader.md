@@ -148,7 +148,7 @@ Yuki Sawa is a Software Engineer in the Cloud Infrastructure team at Edmunds.
 
 </p>
 <p class="clearfix">
-        <img src="{{site.baseimagesurl}}/edmunds-technology.png" style="float: left;margin-right: 1em;max-width:12em;max-height:15em;"/>
+        <img src="{{site.baseimagesurl}}/joey-davis-bio-pic.jpg" style="float: left;margin-right: 1em;max-width:12em;max-height:15em;"/>
 
         <i style="font-size:.75rem">
 
