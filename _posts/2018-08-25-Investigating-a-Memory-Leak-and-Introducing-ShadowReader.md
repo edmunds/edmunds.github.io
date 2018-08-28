@@ -2,10 +2,6 @@
 layout: post
 title: Investigating a Memory Leak and Introducing ShadowReader
 tags: [All Things Tech]
-image: /public/images/edmunds-technology.png
-
-bio: Joey Davis is Technical Lead of the Platform team at Edmunds.
-biopic: edmunds-technology.png
 
 featured-summary: <p>A problem we faced recently was a memory leak in our Node.js application. It confounded our engineering team as it was only occurring in our production environment; we could not reproduce it in QA, until we introduced a new type of load testing tool developed here at Edmunds, which replays production traffic. We also go over how this new load testing tool, ShadowReader, works and why you would want to leverage it for your website.</p>
 
@@ -148,6 +144,15 @@ Sharath Gowda is Executive Director of Site Reliability Engineering at Edmunds.
         <i style="font-size:.75rem">
 
 Yuki Sawa is a Software Engineer in the Cloud Infrastructure team at Edmunds.
+</i>
+
+</p>
+<p class="clearfix">
+        <img src="{{site.baseimagesurl}}/edmunds-technology.png" style="float: left;margin-right: 1em;max-width:12em;max-height:15em;"/>
+
+        <i style="font-size:.75rem">
+
+Joey Davis is Technical Lead of the Platform team at Edmunds.
 </i>
 
 </p>
