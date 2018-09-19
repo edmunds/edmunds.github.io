@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Investigating a Memory Leak and Introducing ShadowReader
+title: How we fixed a NodeJS memory leak by using ShadowReader to replay production traffic into QA
 tags: [All Things Tech]
 
 featured-summary: <p>A problem we faced recently was a memory leak in our Node.js application. It confounded our engineering team as it was only occurring in our production environment; we could not reproduce it in QA, until we introduced a new type of load testing tool developed here at Edmunds, which replays production traffic. We also go over how this new load testing tool, ShadowReader, works and why you would want to leverage it for your website.</p>
