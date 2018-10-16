@@ -99,7 +99,7 @@ ShadowReader is a serverless load testing framework that leverages AWS Lambda an
 
 <img src="{{site.baseimagesurl}}/shadowreader/how-it-works.png"  />
 
-<i>ShadowReader is composed of four different Lambdas: a parser, an orchestrator, a master, and a slave.</i>
+<i>ShadowReader is composed of four different Lambdas: a parser, an orchestrator, a master, and a worker.</i>
 
 When a user visits a website, (typically) a load balancer (in this case, an ELB) will route the request. As the ELB routes the request, it will log this event and ship it to S3.
 
@@ -109,9 +109,9 @@ On the other side of the system, an Orchestrator lambda is also triggered every 
 
 The Orchestrator will then invoke a Master Lambda function. From the Orchestrator, the Master will receive information on which time slice to replay and download the respective data from the S3 bucket of parsed URLs (deposited there by the Parser).
 
-The Master Lambda will first divide the load test URLs into smaller batches, then invoke and pass each batch into a Slave Lambda. If say, 800 requests must be sent out, then eight Slave Lambdas will be invoked, each one handling 100 URLs.
+The Master Lambda will first divide the load test URLs into smaller batches, then invoke and pass each batch into a Worker Lambda. If say, 800 requests must be sent out, then eight Worker Lambdas will be invoked, each one handling 100 URLs.
 
-Finally, the Slave will receive the URLs passed from the Master and start load testing the chosen test environment.
+Finally, the Worker will receive the URLs passed from the Master and start load testing the chosen test environment.
 
 <br>
 ## Getting started
@@ -127,6 +127,10 @@ Current limitations that could be improved upon:
 - Plugins for parsing other types of access logs
 - Easier configuration and set-up
 - Better monitoring of load test results (currently handled through CloudWatch)
+
+*Edit:* 16 October 2018
+_This article was edited to reflect recent changes to nomenclature within
+ShadowReader._
 
 <p class="clearfix">
         <img src="{{site.baseimagesurl}}/sharath-bio-pic.jpg" style="float: left;margin-right: 1em;width:7em" />
