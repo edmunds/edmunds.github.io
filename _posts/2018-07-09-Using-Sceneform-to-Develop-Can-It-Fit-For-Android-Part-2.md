@@ -18,7 +18,7 @@ summary: This is the second post in the series of developing <i>Can It Fit?</i> 
 ---
 
 ## Introduction
-In [Part 1](http://technology.edmunds.com/2018/07/09/Developing-Augmented-Reality-Application-For-Android-Part-1/), we introduced <i>Can It Fit?</i>, an Augmented Reality experience for Edmunds mobile applications.  We also discussed how we approached development of the Android version and app architecture.  This article will focus on how using [Sceneform](https://developers.google.com/ar/develop/java/sceneform/), Google’s library for developing [ARCore](https://developers.google.com/ar/discover/) applications, helped us handle rendering concerns of the application.
+In [Part 1](https://technology.edmunds.com/2018/07/09/Developing-Augmented-Reality-Application-For-Android-Part-1/), we introduced <i>Can It Fit?</i>, an Augmented Reality experience for Edmunds mobile applications.  We also discussed how we approached development of the Android version and app architecture.  This article will focus on how using [Sceneform](https://developers.google.com/ar/develop/java/sceneform/), Google’s library for developing [ARCore](https://developers.google.com/ar/discover/) applications, helped us handle rendering concerns of the application.
 
 <br>
 ## Triangles as Primitives

@@ -30,7 +30,7 @@ At Duke University, students David Clancy (Statistical Science & Mathematics), T
 
 "'Big Data' trends are likely to generate lucrative and satisfying jobs for many of today's brightest students, DataFest is a résumé-builder as well as a memorable and fun experience," observed Paddy Hannon, Chief Data Officer at Edmunds.com.  "We appreciated the opportunity to get involved, not only to support this worthwhile program but also to connect with students who could become members of the Edmunds.com data team someday soon."
 
-There are currently six open positions in Edmunds' Business Analytics department; details can be found at [Edmunds Jobs](http://www.edmunds.com/about/jobs/).
+There are currently six open positions in Edmunds' Business Analytics department; details can be found at [Edmunds Jobs](https://www.edmunds.com/careers/).
 
 Other sponsors of DataFest include APT, DataCamp, Google, MassMutual Financial Group, MaxPoint, Panton Inc., RTI International, SAS and Summit. For more information on DataFest, please visit [amstat.org/education/datafest](http://www.amstat.org/education/datafest/).
 
