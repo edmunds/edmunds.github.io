@@ -9,7 +9,7 @@ Built in LA recently published an article referencing Edmunds as one of the Top 
 
 > Edmunds is known for caring about its people and I'm proud to work for a company that keeps its employees front and center. We have one of the most innovative and progressive cultures that pushes itself to transform our industry, not take incremental steps. We are set apart from other tech organizations because we are not only progressive, but we have a culture that empowers its people to be treated as adults and be held accountable for results. Each of these things are hard to replicate in a meaningful way at another company. Each of these things makes us uniquely Edmunds.
 
-If you are interested in learning more about our culture, take a look at our [open positions](http://www.edmunds.com/careers/) and interview for yourself. 
+If you are interested in learning more about our culture, take a look at our [open positions](https://www.edmunds.com/careers/) and interview for yourself. 
 
 
 
