@@ -1,5 +1,12 @@
-## Open Sourcing Databricks Integration Tools at Edmunds
+---
+layout: post
+title: Open Sourcing Databricks Integration Tools at Edmunds
+tags: [All Things Tech]
 
+featured-summary: <p>Edmunds data engineering has created 2 new open source projects to integrate with Databricks.</p>
+
+summary: Edmunds data engineering has created 2 new open source projects to integrate with Databricks.
+---
 
 ## What is Databricks and How is it Useful for Edmunds?
 
@@ -94,8 +101,7 @@ Here is what we built:
 
 What does it roughly Look Like?
 
-![databricks-at-edmunds](images/Edmunds-Databricks.png "image_tooltip")
-
+<img src="{{site.baseimagesurl}}/Edmunds-Databricks.png"  />
 
 
 ## High Level What This Delivers for Us?
