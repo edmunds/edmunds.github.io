@@ -3,9 +3,9 @@ layout: post
 title: Open Sourcing Databricks Integration Tools at Edmunds
 tags: [All Things Tech]
 
-featured-summary: <p>Edmunds data engineering has created 2 new open source projects to integrate with Databricks.</p>
+featured-summary: <p>Edmunds data engineering extends the power of Databricks with two new open source projects focused on jvm based build and deployment tools.</p>
 
-summary: Edmunds data engineering has created 2 new open source projects to integrate with Databricks.
+summary: Edmunds data engineering extends the power of Databricks with two new open source projects focused on jvm based build and deployment tools.
 ---
 
 ## What is Databricks and How is it Useful for Edmunds?
