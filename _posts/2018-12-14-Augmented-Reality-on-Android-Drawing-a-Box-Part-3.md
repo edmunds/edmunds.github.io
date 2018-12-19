@@ -28,7 +28,7 @@ This post will focus on the implementation details of the virtual parking space.
 ## Virtual Parking Spot
 To represent the box mathematically, we need eight vertices positioned in virtual 3D space and connected together to form edges and faces.  Every frame of the application, the vertices update their position according to user input.  We look at the box as a single object and its vertices and faces as internal data or properties.  We also know that the box needs to be able to reposition, rotate, and scale.  Understanding the underlying data and desired behavior, we can sketch a rough model of a Box class.
 
-<img src="{{site.baseimagesurl}}/can-it-fit/box-class-uml.png"  />
+<img src="{{site.baseimagesurl}}/can-it-fit/box-uml.png"  />
 
 Drawing the box on the screen is another “dimension” to the problem.  Since the most common OpenGL ES primitive for drawing objects is a triangle ([Part 2](https://technology.edmunds.com/2018/07/09/Using-Sceneform-to-Develop-Can-It-Fit-For-Android-Part-2/)), we would need to break every face of the box into triangles (two at a minimum, because one rectangle can be broken into two triangles), and send its vertex information to the GPU using OpenGL ES API calls.  Vertex sort order also matters, which adds another level of complexity for us to maintain in the codebase.  Ideally, we would like to have an object that takes care of the box internal implementation  and rendering details, and exposes methods that are meaningful to update logic such as changing  the center and length of the sides.
 
