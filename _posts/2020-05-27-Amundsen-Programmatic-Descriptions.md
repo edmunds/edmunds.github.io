@@ -6,8 +6,7 @@ image: /public/images/edmunds-technology.png
 
 bio: Sam Shuster is Staff Engineer on the Data Engineering team at Edmunds.com
 
-<!--todo get new photo-->
-biopic: ../public/images/sam-shuster-bio-pic.jpg
+biopic: ../public/images/sam-biopic2.jpg
 featured-summary: <p>An overview of a new feature developed for the opensourced data catalog tool Amundsen that allowed Edmunds to integrate Data Quality metadata.</p>
 
 summary: An overview of a new feature developed for the opensourced data catalog tool Amundsen that allowed Edmunds to integrate Data Quality metadata.
