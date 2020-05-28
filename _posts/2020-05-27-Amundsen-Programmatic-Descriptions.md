@@ -69,7 +69,7 @@ Above is an example of an Amundsen table page that you would see by following th
 
 They can also be affiliated with "programmatic tags". More on this later
 
-Below you can see the graphical visual of the one-to-many relationship between programmatic descriptions and tables. Each blue circle is a programmatic description which has a unique key that is derived from the description_source attribute. This way you can update existing programmatic description fields.
+Below you can see the visual of the one-to-many relationship between programmatic descriptions and tables from the Neo4j webui. Each blue circle is a programmatic description which has a unique key that is derived from the description_source attribute. This way you can update existing programmatic description fields.
 
 ![A neo4j Query of Programmatic Descriptions (in blue).]({{site.baseimagesurl}}/amundsen-programmatic/image_2.png)
 
