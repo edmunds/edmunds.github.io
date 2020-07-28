@@ -3,6 +3,10 @@
 .nav {
     background: white;
     border-bottom: #e6e6e6 solid 1px;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 10;
 
     .text-logo {
       display: none;
@@ -102,7 +106,7 @@
             border-radius: 0 0 1em 0;
             max-width: 95%;
             overflow: hidden;
-            position: absolute;
+            position: fixed;
             transition: left .5s;
             top: 3rem;
             z-index: 1;

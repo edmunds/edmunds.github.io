@@ -4,33 +4,42 @@
 	<body>
         {% include nav.html %}
 
-        {% if page.isHome and paginator.page == 1 %}
-            {% include hero.html %}
-            <div class="flex-container">
-                <div class="featured">
-                    {% assign featured_post = site.posts[0] %}
-                    {% include preview-featured.html post=featured_post %}
-                </div>
-            </div>
+        {% if page.isHome or page.isAbout %}
+          {% include hero.html %}
         {% endif %}
 
-        {% if false %}
-            <div class="flex-container">
-                <header class="page-tag">
-                  <h1>{{ page.tag }}</h1>
-                </header>
-            </div>
-        {% endif %}
+        <div class="main-content">
+          <div class="flex-container">
+            <h1 class="page-title">Edmunds Tech</h1>
+          </div>
 
-        <div class="flex-container">
-            {{ content }}
+          {% if page.isHome and paginator.page == 1 %}
+              <div class="flex-container">
+                  <div class="featured">
+                      {% assign featured_post = site.posts[0] %}
+                      {% include preview-featured.html post=featured_post %}
+                  </div>
+              </div>
+          {% endif %}
 
-            <div class="secondary-container">
-                {% if page.isAbout != true %}
-                    {% include about.html %}
-                {% endif %}
-                {% include posts-by-date.html %}
-            </div>
+          {% if false %}
+              <div class="flex-container">
+                  <header class="page-tag">
+                    <h1>{{ page.tag }}</h1>
+                  </header>
+              </div>
+          {% endif %}
+
+          <div class="flex-container">
+              {{ content }}
+
+              <div class="secondary-container">
+                  {% if page.isAbout != true %}
+                      {% include about.html %}
+                  {% endif %}
+                  {% include posts-by-date.html %}
+              </div>
+          </div>
         </div>
 
         {% include footer.html %}

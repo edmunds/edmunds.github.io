@@ -1,5 +1,21 @@
 @import "variables";
 
+.main-content {
+  margin-top: 55px;
+
+  .page-title {
+    position: absolute;
+    margin: 0;
+    left: 2rem;
+    top: -4rem;
+    color: #fff;
+    text-align: center;
+    font-size: 4rem;
+    letter-spacing: .1rem;
+    width: auto;
+    display: none;
+  }
+}
 .hero-container {
   background-image: url('public/images/hero-lg.jpg');
   background-position: 50% 50%;
@@ -7,30 +23,33 @@
   background-size: cover;
   overflow: hidden;
   padding-top: 34%;
-  position: relative;
   width: 100%;
+  position: fixed;
+  top: 55px;
 
-  h1 {
-    position: absolute;
-    margin: 0;
-    left: 2rem;
-    bottom: -22px;
-    margin: 0;
-    color: #fff;
-    text-align: center;
-    font-size: 4rem;
-    letter-spacing: .1rem;
-    width: auto;
+  + .main-content {
+    position: relative;
+    margin-top: 34%;
+    background: #fff;
+
+    .page-title {
+      display: block;
+    }
   }
 }
 
 @media (max-width: $breakpoint-medium) {
   .hero-container {
     padding-top: 41%;
+    top: 48px;
 
-    h1 {
-      font-size: 3rem;
-      bottom: -16px;
+     + .main-content {
+       margin-top: calc(41% + 48px);
+
+      .page-title {
+        font-size: 3rem;
+        top: -3rem;
+      }
     }
   }
 }
@@ -38,13 +57,16 @@
 @media (max-width: $breakpoint-small) {
   .hero-container {
     padding-top: 41%;
+    top: 48px;
 
-    h1 {
-      font-size: 2rem;
-      left: auto;
-      width: 100%;
-      bottom: 50%;
-      transform: translateY(50%);
+    + .main-content {
+      margin-top: calc(41% + 48px);
+
+      .page-title {
+        font-size: 2rem;
+        left: 0;
+        top: -2rem;
+      }
     }
   }
 }
