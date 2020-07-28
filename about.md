@@ -15,7 +15,7 @@ isAbout: true
         a scalable and highly-available infrastructure with reliable services.
     </p>
     <p>
-        We are excited by software design and strive to create engaging exper-iences while using
+        We are excited by software design and strive to create engaging experiences while using
         coding practices that promote streamlined website production and experimentation.
 
         We embrace continuous delivery, dev ops, and are constantly improving our processes so we can stay lean
