@@ -27,8 +27,7 @@ In our journey from migrating away from in-memory distributed store coherence, w
 Over a while, our APIs evolved from a few APIs to many as the use cases continued to grow.  With this, a few patterns started to develop.
 1. **Discoverability** - With many APIs, discovering them was an issue for the client. It was hard to narrow down on the proper API from the documentation
 2. **Over and Under Fetching** - There were also cases of over-fetching where the client had to request more than what they needed and under fetching where they had to make multiple calls to get what they needed
-3. **Need For Aggregate APIs** - BFFs were introduced, which aggregated  several microservices together to make a meaningful aggregate to the website or mobile app  (Give an example)
-
+3. **Need For Aggregate APIs** - BFFs were introduced, which aggregated several microservices together to make a meaningful API to the website or mobile app. (For example, [our rankings page for SUV](https://www.edmunds.com/suv/) needs vehicle data and ranking data, which are kept in separate microservices. Without BFF, a mobile app would make multiple calls to the server and be delayed by round trips to render a page. A BFF API helps reducing calls into 1 for the page to get all data.)
 
 We were not alone in facing these issues; several companies, including [Netflix](https://netflixtechblog.com/how-netflix-scales-its-api-with-graphql-federation-part-2-bbe71aaec44a) wrote about similar issues with REST services and why they chose GraphQL Federation. The growing need at an industry level to solve these issues led to the introduction of GraphQL
 
@@ -45,13 +44,11 @@ In our first attempt at GraphQL, we did not create separate artifacts for [graph
 <img src="{{site.baseimagesurl}}/GraphQL-Federation-adoption-2.png" style="margin-right: 1em; width:25em;" />
 
 
-We launched this in production successfully.  Some issues we noticed with our initial GraphQL design are as follows
+We launched this in production successfully.  Some issues we noticed with our initial GraphQL design are as follows:
 
-Central GraphQL is a monolith and houses all the schema and resolvers
-Central schema dependent on REST APIs, Makes it cumbersome to evolve REST and GraphQL independently
-Inefficient and led to a proliferation of  REST API calls
-Before optimization and caching, a single GraphQL call made as many as 300 REST API Calls and took as much as 500-800ms
-Used [Dataloaders](https://xuorig.medium.com/the-graphql-dataloader-pattern-visualized-3064a00f319f) (shrunk multiple id calls into one call with multiple ids) and caching to mitigate the issue
+- Central GraphQL is a monolith and houses all the schema and resolvers.
+- Central schema is dependent on REST APIs, making it cumbersome to evolve REST and GraphQL independently. This is inefficient and led to a proliferation of  REST API calls.
+- Before optimization and caching, a single GraphQL call made as many as 300 REST API Calls and took as much as 500-800ms . We used [Dataloaders](https://xuorig.medium.com/the-graphql-dataloader-pattern-visualized-3064a00f319f) (shrunk multiple id calls into one call with multiple ids) and caching to mitigate the issue
 
 Apollo introduced [schema stitching](https://www.apollographql.com/blog/backend/graphql-schema-stitching/). We attempted to use it but noticed [issues with it](https://spectrum.chat/prisma/graphql/common-issues-with-schema-stitching~4908a1c0-a007-4b73-91e9-3fda5e7e4bd8) so did not switch to using it.
 
