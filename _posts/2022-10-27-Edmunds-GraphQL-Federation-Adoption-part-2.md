@@ -14,21 +14,21 @@ Yuhan Zhang, Suresh Narasimhan
 
 _In Part 1 of this article, we talked about our motivation for adopting GraphQL Federation and how we restructured our existing REST apps into subgraphs to connect to a supergraph with GraphQL Federation. Individual teams owned the subgraphs, and as the number of subgraphs grew, GraphQL deployment became critical. As teams created and evolved their subgraphs we wanted the GraphQL deployment infrastructure to catch compatibility, performance issues and enforce standards._
 
-_At Edmunds, our apps go through canary deployments with spinnaker/ This worked well for us, and we wanted to check if we could do the same for GraphQL._
+_At Edmunds, our apps go through [canary](https://spinnaker.io/docs/guides/user/canary/) deployments with (spinnaker](https://spinnaker.io/). This worked well for us, and we wanted to check if we could do the same for GraphQL._
 
 _In part 2, the discussion will focus on how we fit our GraphQL apps into our existing continuous delivery pipeline with canary deployment and how the supergraph app is set up to protect against backward incompatible changes from developers or poorly designed queries. We will also discuss strategies to improve the schema and optimize performance._
 
 &nbsp;
 ## GraphQL Deployment
 
-TODO: Our proof-of-concept GraphQL ...
+Our proof-of-concept GraphQL subgraphs were deployed along with our REST apps/microservices. After completing the proof-of-concept, the subgraphs were deployed as standalone artifacts. The main challenges with GraphQL deployment were:
 
 - **Super Graph Composability**: If a new version of a subgraph is incompatible with the other subgraphs, the federation server cannot compose a supergraph, and the federation server will fail to start.
 
 - **Backward Compatibility to Clients**: A new version of a subgraph may be compatible with other subgraphs to compose a supergraph, but it can still be incompatible with the live queries on production. Or, the new supergraph may be incompatible with the client. For example:
   - Removal of a required field, changing the return type of a required field and changing the type of a required parameter.
 
-TODO: Although using Apollo Studio solved the two issues above ...
+Although using Apollo Studio solved the two issues above, we couldn't achieve canary deployments with Apollo Studio.  As a result, our app was deployed with a fixed schema and didn’t have a schema registry to poll and apply schema. A schema registry is a single point of failure. It also risks deploying an incompatible schema to the live environment if the schema check is imperfect. The [Netflix GraphQL article](https://netflixtechblog.com/how-netflix-scales-its-api-with-graphql-federation-part-2-bbe71aaec44a) had a similar opinion and mentioned “_[their] gateway dynamically [updated] its schema by polling the schema registry. [they were] in the process of decoupling these by storing the federation config in a versioned S3 bucket, making the gateway resilient to schema registry failures_”. By chance we did not get into using a schema registry. On the other hand, it meant that we were required to reload the supergraph after a new version of subgraph was deployed. We were able to avoid reloading of schema by using canary deployment. (Our canary deployment performed a gradual transition of both supergraph and subgraph.)
 
 &nbsp;
 ### SuperGraph Composability
@@ -49,13 +49,13 @@ A naive approach would be to replay logs at the supergraph. This option is impla
 
 The schema can be easily obtained at your supergraph by `npx get-graphql-schema http://localhost:3000/graphql/` (likewise for production).
 
-The queries in production can be collected through your log. By default the GraphQL federation was performing HTTP POST for queries, which is hard to trace to the query in the access log. HTTP POST did not make sense as our application involves mostly reading. So, instead of HTTP POST, we configured our Apollo Client’s fetchOption to perform HTTP GET at GraphQL supergraph. (See the below section GraphQL Persisted Query for details.) Apollo Gateway is already capable of handling HTTP GET out of the box. This allows the query and variables to appear in the URI path with &query= and &variables=. Consequently the queries showed up in the log. Since the URI path can be very long with a GraphQL query, the load balancer needs to be adjusted to allow larger header size. To shorten the urls, we enabled GraphQL persisted query in the client. (See below in GraphQL Persisted Query for details) The persisted query feature also helps us collect queries from logs like we do with other REST apps.
+The queries in production can be collected through your log. By default the GraphQL federation was performing HTTP POST for queries, which is hard to trace to the query in the access log. HTTP POST did not make sense as our application involves mostly reading. So, instead of HTTP POST, we configured our Apollo Client’s fetchOption to perform HTTP GET at GraphQL supergraph. (See the below section _GraphQL Persisted Query_ for details.) Apollo Gateway is already capable of handling HTTP GET out of the box. This allows the query and variables to appear in the URI path with &query= and &variables=. Consequently the queries showed up in the log. Since the URI path can be very long with a GraphQL query, the load balancer needs to be adjusted to allow larger header size. To shorten the urls, we enabled GraphQL persisted query in the client. (See below in _GraphQL Persisted Query_ for details) The persisted query feature also helps us collect queries from logs like we do with other REST apps.
 
-We developed an in-house tool to estimate the GraphQL field usage. Given a schema and a query, the tool will parse the query with the `graphql-tag` library, a dependency of the NodeJS GraphQL implementation. The tool traverses the selection in the parsed query’s OperationDefinitions. Each field usage is output in one line, in the format of {type_name}.{field_name}:{value_type}. For a parameter usage at a resolver, it is written as {type_name}.{field_name}@{parameter_name}:{value_type}
+We developed an in-house tool to estimate the GraphQL field usage. Given a schema and a query, the tool will parse the query with the `graphql-tag` library, a dependency of the NodeJS GraphQL implementation. The tool traverses the selection in the parsed query’s OperationDefinitions. Each field usage is output in one line, in the format of _{type_name}.{field_name}:{value_type}_. For a parameter usage at a resolver, it is written as _{type_name}.{field_name}@{parameter_name}:{value_type}_
 
 For example:
-- Inventory.mileage:Int is a field called mileage our Inventory type and it is an integer.
-- EditorialSegment.segmentRatings@pagesize:Int is a parameter called pagesize as an integer value, on the resolver of EitorialSegment.segmentRatings.
+- _Inventory.mileage:Int_ is a field called mileage our Inventory type and it is an integer.
+- _EditorialSegment.segmentRatings@pagesize:Int_ is a parameter called pagesize as an integer value, on the resolver of _EitorialSegment.segmentRatings_.
 
 With the query field usages stored to a file, a diff can be easily made to find out the incompatibility in two different schemas. This tool currently handles usages in read operations of fragments, parameters, enum, and interface. (We have a plan to opensource this tool.)
 
@@ -90,7 +90,7 @@ Getting the new schema can be easily done by calling apolloGateway.load() after 
 
 We placed the logic in the server and exposed it to an HTTP endpoint. Since the supergraph schema is stored in the memory of every server, It requires calling the endpoint at every instance in the cluster. This is not as automatic as the polling mechanism with a schema registry, but gives more control.
 
-Meanwhile, actively calling schema reload could also be error-prone. Notice that there is a flaw in this approach: a new instance of the server may start up any time by autoscaling. A newly started server may apply the new version of the subgraph to compose a supergraph. That means with this setup, there is no guarantee of serving with a certain version of the supergraph schema. To really address this issue, the new version of a subgraph must be isolated to its designated supergraph cluster from its stable version during the deployment. (We no longer follow this unreliable approach of reloading schema and have proceeded with canary deployment.)
+Meanwhile, actively calling schema reload could also be error-prone. Notice that there is a flaw in this approach: a new instance of the server may start up any time by autoscaling. A newly started server may apply the new version of the subgraph to compose a supergraph. That means with this setup, there is <u>no guarantee of serving with a certain version of the supergraph schema.</u> To really address this issue, the new version of a subgraph must be isolated to its designated supergraph cluster from its stable version during the deployment. (We no longer follow this unreliable approach of reloading schema and have proceeded with canary deployment.)
 
 &nbsp;
 ### GraphQL: Canary Deployment
@@ -110,31 +110,31 @@ Performance, error log and HTTP status are then measured using our existing CD-p
 
 By default, ApolloGateway will use POST calls to communicate to each subgraph. Typically, GraphQL errors are included in the response body and response status can still be HTTP 200 despite an error. This does not fit our existing monitoring and alert setup, which largely depends on HTTP error status. Using HTTP GET also takes advantage of CDN cache. Our internal REST cache uses the url path as a cache key, following the convention of a CDN. Our canary deployment pipeline checks HTTP status to decide if a test passes.
 
-Luckily, the ApolloGateway endpoint can accept both POST calls and HTTP GET calls, taking &query= for the GraphQL query, &variable= for variable replacement. Making the Java subgraphs to read HTTP GET is as easy as changing the annotation from springframework @POST to @GET, and from requestBody to @QueryParam. To make ApolloGateway call a subgraph using HTTP GET, we implemented our own subclass of RemoteGraphQLDataSource, which performs HTTP GET. The custom DataSource is provided as part of buildService.
+Luckily, the ApolloGateway endpoint can accept both POST calls and HTTP GET calls, taking _&query=_ for the GraphQL query, &variable= for variable replacement. Making the Java subgraphs to read HTTP GET is as easy as changing the annotation from springframework @POST to @GET, and from requestBody to @QueryParam. To make ApolloGateway call a subgraph using HTTP GET, we implemented our own subclass of _RemoteGraphQLDataSource_, which performs HTTP GET. The custom DataSource is provided as part of buildService.
 
 ```
-class HttpGetGraphqlDataSource extends RemoteGraphQLDataSource
-{ … }
-new ApolloGateway({ buildService: ({ name, url}) =>
-new HttpGetGraphqlDataSource(
-          Object.assign({ name, url }))
- })
+  class HttpGetGraphqlDataSource extends RemoteGraphQLDataSource
+  { … }
+  new ApolloGateway({ buildService: ({ name, url}) =>
+  new HttpGetGraphqlDataSource(
+            Object.assign({ name, url }))
+   })
  ```
 
- To override the HTTP status of GraphQL, we defined our own plugins , which overrode the behavior during requestDidStart , where request headers could be read from requestContext.request.http.headers.get(..), response headers could be set in the return value of as .willSendResponse with requestContext.response.http.headers,set(..) . The HTTP status can be assigned in requestContext.response.http.status. Having content in requestContext.response.errors results HTTP 400. To make an HTTP 500 error, we throw an error in our .willSendResponse method. The plugin is also a good place to collect statsd metrics, set tracing HTTP headers, override logger, and implement custom validation rules, forward HTTP headers and proxy HTTP status from / to the subgraphs.
+ To override the HTTP status of GraphQL, we defined our own plugins , which overrode the behavior during _requestDidStart_ , where request headers could be read from _requestContext.request.http.headers.get(..)_, response headers could be set in the return value of as _.willSendResponse_ with _requestContext.response.http.headers,set(..)_ . The HTTP status can be assigned in requestContext.response.http.status. Having content in requestContext.response.errors results HTTP 400. To make an HTTP 500 error, we throw an error in our _.willSendResponse_ method. The plugin is also a good place to collect Statsd metrics, set tracing HTTP headers, override logger, and implement custom validation rules, forward HTTP headers and proxy HTTP status from / to the subgraphs.
 
 &nbsp;
 ###GraphQL Persisted Query
 
-GraphQL queries are usually large. Moreover, since GraphQL with HTTP GET keeps the GraphQL query in the query parameter, GraphQL query cannot take the advantage of the compression in Content-Encoding. Fortunately, ApolloGateway provides Persisted Query, which can represent a query with a Hash. Persisted Queries are defined on the fly (not predefined) - convert a query to query hash and query with the query hash; if the query hash cannot be resolved, make a second call with both of the query hash and the query. This protocol has been implemented to Apollo-Client in JavaScript, and made transparent to the developer - developer can just treat it as if it is querying directly with the GraphQL query. To enable Persisted Query, add a persisted query link during initialization of an ApolloClient.
+GraphQL queries are usually large. Moreover, since GraphQL with HTTP GET keeps the GraphQL query in the query parameter, GraphQL query cannot take the advantage of the compression in Content-Encoding. Fortunately, ApolloGateway provides Persisted Query, which can represent a query with a Hash. [Persisted Queries are defined on the fly (not predefined)](https://www.apollographql.com/docs/apollo-server/performance/apq/) - convert a query to query hash and query with the query hash; if the query hash cannot be resolved, make a second call with both of the query hash and the query. This protocol has been implemented to Apollo-Client in JavaScript, and made transparent to the developer - developer can just treat it as if it is querying directly with the GraphQL query. To enable Persisted Query, add a persisted query link during initialization of an ApolloClient.
 
 ```
-import { createPersistedQueryLink } from '@apollo/client/link/persisted-queries';
+  import { createPersistedQueryLink } from '@apollo/client/link/persisted-queries';
 
-new ApolloClient({
-    link: ApolloLink.from([new RetryLink(...), createPersistedQueryLink({ sha256 }), new HttpLink(…)]),
-    …
-  });
+  new ApolloClient({
+      link: ApolloLink.from([new RetryLink(...), createPersistedQueryLink({ sha256 }), new HttpLink(…)]),
+      …
+    });
 ```
 To perform HTTP GET with persisted query, configure the fetchOption in HttpLink to use HTTP GET:
 ```
@@ -145,32 +145,32 @@ To perform HTTP GET with persisted query, configure the fetchOption in HttpLink 
 ```
 On the server side for ApolloGateway, enable the persistedQuery option along with the plugins options. Since we have multiple instances of ApolloGateway, we chose Redis as a shared cache to store the persisted queries.
 ```
-const { RedisCache } = require('apollo-server-cache-redis');
-…
-persistedQueries: {
-      ttl: 3600,
-      cache: new RedisCache( redisHost )
-},
+  const { RedisCache } = require('apollo-server-cache-redis');
+  …
+  persistedQueries: {
+        ttl: 3600,
+        cache: new RedisCache( redisHost )
+  },
 ```
 
 Unfortunately graphql-java didn’t implement the Persisted Query. So the queries on the Subgraphs could not use this feature. To enforce the frontend developer to use only persisted query, a validation has been set up in the GraphQL plugin to check for the &extensions= parameter. The validation will cause HTTP 403, failing any usage of graphql without the Apollo-Client. This was a great feature to fail QA canary deployment for frontend developers who didn’t follow the standard. Since the validation happened only on HTTP GET calls, tools like GraphiQL and Voyager still worked the way they were through POST calls. However, later we found out that in a retried GraphQL query, the url was always provided without the persisted query hash. Thus, this feature was only enabled in the QA environment and never on production.
 
-The benefit of Persisted Query is not limited to the bandwidth saving. It also helps us define limited number of queries, and use &variables= well to prevent proliferation of queries. This further opens us to tracking and automated deployment.
+The benefit of Persisted Query is not limited to the bandwidth saving. It also helps us define limited number of queries, and use _&variables=_ well to prevent proliferation of queries. This further opens us to tracking and automated deployment.
 
 &nbsp;
 ###GraphQL Complexity
 
-GraphQL provides the flexibility for developers to make their own queries, but we still want to prevent a developer from doing crazy things. This can be done by limiting the complexity of a query in the supergraph. At each GraphQL subgraph, we measured response time metric at the Resolvers (aka DataFetchers in java-) by iterating them from graphql.schema.idl.RuntimeWiring and wrap each DataFetcher into a subclass DataFetcher to plot the milliseconds that a resolver takes, sending as statsd metrics. By assigning a total cost of the query, we have an estimation in the worst case on how slow a Graphql query may respond. The following options are added to the GraphQL options.validationRules:
-graphql-cost-analysis for limiting the maximum complexity
-graphql-depth-limit to limit depth of nested queries.
+GraphQL provides the flexibility for developers to make their own queries, but we still want to prevent a developer from doing crazy things. This can be done by limiting the complexity of a query in the supergraph. At each GraphQL subgraph, we measured response time metric at the Resolvers (aka _DataFetchers_ in java-) by iterating them from _graphql.schema.idl.RuntimeWiring_ and wrap each _DataFetcher_ into a subclass _DataFetcher_ to plot the milliseconds that a resolver takes, sending as Statsd metrics. By assigning a total cost of the query, we have an estimation in the worst case on how slow a GraphQL query may respond. The following options are added to the GraphQL _options.validationRules_:
+- [graphql-cost-analysis](https://www.npmjs.com/package/graphql-cost-analysis) for limiting the maximum complexity
+- [graphql-depth-limit](https://www.npmjs.com/package/graphql-depth-limit) to limit depth of nested queries.
 
-The complexity plugins causes a bad query to fail in canary deployment, preventing infeasible queries to be released in production.
+The complexity plugins cause a bad query to fail in canary deployment, preventing infeasible queries to be released in production.
 
 &nbsp;
 ###Accessibility
 
-GraphiQL Explorer made it easy for developers to click and choose fields to select. It improves the productivity of the team to make ad hoc queries, or just to study the data.
-Displaying the supergraph schema GraphQL Voyager makes your API more understandable.
+[GraphiQL Explorer](https://github.com/OneGraph/graphiql-explorer) made it easy for developers to click and choose fields to select. It improves the productivity of the team to make ad hoc queries, or just to study the data.
+Displaying the supergraph schema [GraphQL Voyager](https://github.com/IvanGoncharov/graphql-voyager) makes your API more understandable.
 
 &nbsp;
 ##GraphQL Optimization
@@ -197,18 +197,18 @@ The undesirable fanout often suggests a problem in schema design. It is tempting
 
 In our case, a root query with vehicle modelYear is a lot easier to query by providing parameters model_name and year, compared to querying a model entity at the root, and then querying modelYear entities in the next level by filtering by parameter on years.
 
-The downside of choosing a detailed type as a root query could be having too many parameters at one type. Thus, it is necessary to group parameters into complex Input types. For examples: pagination can wrap pageSize and pageNum; sortBy can wrap fields to sort on and sorting directions as value; vehicleFilter can be the parameters to filter by vehicle model and year; reviewFilter can be parameters to filter by rating score and topic. Having complex Input types becomes self-explanatory and is easy to navigate in GraphiQL Explorer.
+The downside of choosing a detailed type as a root query could be having too many parameters at one type. Thus, it is necessary to group parameters into complex Input types. For examples: _pagination_ can wrap _pageSize_ and _pageNum_; _sortBy_ can wrap fields to sort on and sorting directions as value; _vehicleFilter_ can be the parameters to filter by vehicle model and year; _reviewFilter_ can be parameters to filter by rating score and topic. Having complex Input types becomes self-explanatory and is easy to navigate in GraphiQL Explorer.
 
 <img src="{{site.baseimagesurl}}/GraphQL-Federation-GraphiQL.png" style="margin-right: 1em; width:20em;" />
 
 &nbsp;
 ###Improving Schema Design
 
-The point of having GraphQL Federation is to query mixed subgraphs. The ApolloGateway (the federation server) doesn’t contain any Schema. All graphs are defined by the subgraph. Thus, to join two subgraphs, a type in the other subgraph is redefined with @extends annotation, and with @key to identify a way to get the object from the other subgraph. On the other hand, subgraphs do not talk to each other directly to fetch entities. Through the @extends annotation, subgraphs lets the supergraph (federation server) decide how to perform a fetchEntities call to the original definition and perform a mixing.
-- @extends: suggests there is an original type definition on the other subgraph. This subgraph adds fields.
-- @key: suggests foreign keys to provide to the original type definition in the other subgraph to fetch entities. This subgraph should provides the foreign keys
-- @external: suggests that the field came from the original type definition in the other subgraph.
-- @requires: suggests to get a list of external fields from the original type definition in the other subgraph, before this resolver can do its job.
+The point of having GraphQL Federation is to query mixed subgraphs. The ApolloGateway (the federation server) doesn’t contain any Schema. All graphs are defined by the subgraph. Thus, to join two subgraphs, a type in the other subgraph is redefined with _@extends_ annotation, and with _@key_ to identify a way to get the object from the other subgraph. On the other hand, subgraphs do not talk to each other directly to fetch entities. Through the _@extends_ annotation, subgraphs lets the supergraph (federation server) decide how to perform a fetchEntities call to the original definition and perform a mixing.
+- _@extends_: suggests there is an original type definition on the other subgraph. This subgraph adds fields.
+- _@key_: suggests foreign keys to provide to the original type definition in the other subgraph to fetch entities. This subgraph should provides the foreign keys
+- _@external_: suggests that the field came from the original type definition in the other subgraph.
+- _@requires_: suggests to get a list of external fields from the original type definition in the other subgraph, before this resolver can do its job.
 
 With GraphQL Federation, each subgraph can be a microservice without knowing other subgraphs, but can still enrich a type originally defined by other subgraphs. A page can be served completely by making exactly 1 query through the join of different subgraphs.
 
