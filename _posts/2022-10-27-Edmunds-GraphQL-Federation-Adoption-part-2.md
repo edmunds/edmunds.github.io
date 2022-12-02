@@ -121,7 +121,7 @@ Luckily, the ApolloGateway endpoint can accept both POST calls and HTTP GET call
    })
  ```
 
- To override the HTTP status of GraphQL, we defined our own plugins , which overrode the behavior during _requestDidStart_ , where request headers could be read from _requestContext.request.http.headers.get(..)_, response headers could be set in the return value of as _willSendResponse_ with _requestContext.response.http.headers,set(..)_ . The HTTP status can be assigned in requestContext.response.http.status. Having content in requestContext.response.errors results HTTP 400. To make an HTTP 500 error, we throw an error in our _.willSendResponse_ method. The plugin is also a good place to collect Statsd metrics, set tracing HTTP headers, override logger, and implement custom validation rules, forward HTTP headers and proxy HTTP status from / to the subgraphs.
+ To override the HTTP status of GraphQL, we defined our own plugins , which overrode the behavior during _requestDidStart_ , where request headers could be read from _requestContext.request.http.headers.get(..)_, response headers could be set in the return value of as _willSendResponse_ with _requestContext.response.http.headers,set(..)_ . The HTTP status can be assigned in requestContext.response.http.status. Having content in requestContext.response.errors results HTTP 400. To make an HTTP 500 error, we throw an error in our _.willSendResponse_ method. The plugin is also a good place to collect StatsD metrics, set tracing HTTP headers, override logger, implement custom validation rules, and forward HTTP headers and proxy HTTP status from / to the subgraphs.
 
 &nbsp;
 ### GraphQL Persisted Query
@@ -153,12 +153,12 @@ On the server side for ApolloGateway, enable the persistedQuery option along wit
   },
 ```
 
-To enforce the frontend developer to use only persisted query, a validation has been set up in the GraphQL plugin to check for the &extensions= parameter. The validation will cause HTTP 403, failing any usage of graphql without the Apollo-Client. This was a great feature to fail QA canary deployment for frontend developers who didn’t follow the standard. Since the validation happened only on HTTP GET calls, tools like GraphiQL and Voyager still worked the way they were through POST calls. However, later we found out that in a retried GraphQL query, the url was always provided without the persisted query hash. Thus, this feature was only enabled in the QA environment and never on production.
+To force frontend developers to use only persisted query, a validation has been set up in the GraphQL plugin to check for the &extensions= parameter. The validation will cause HTTP 403, failing any usage of Graphql without the Apollo-Client. This was a great feature to fail QA canary deployment for frontend developers who didn’t follow the standard. Since the validation happened only on HTTP GET calls, tools like GraphiQL and Voyager still worked the way they were through POST calls. However, later we found out that in a retried GraphQL query, the url was always provided without the persisted query hash. Thus, this enforcement feature was only enabled in the QA environment and never on production.
 
-The benefit of Persisted Query is not limited to the bandwidth saving. It also helps us define limited number of queries, and use _&variables=_ well to prevent proliferation of queries. This further opens us to tracking and automated deployment.
+The benefit of Persisted Query is not limited to the bandwidth saving. It also helps us define a limited number of queries, and use _&variables=_ well to prevent proliferation of queries. This further opens us to tracking and automated deployment.
 
 &nbsp;
-###GraphQL Complexity
+### GraphQL Complexity
 
 GraphQL provides the flexibility for developers to make their own queries, but we still want to prevent a developer from doing crazy things. This can be done by limiting the complexity of a query in the supergraph. At each GraphQL subgraph, we measured response time metric at the Resolvers (aka _DataFetchers_ in java-) by iterating them from _graphql.schema.idl.RuntimeWiring_ and wrap each _DataFetcher_ into a subclass _DataFetcher_ to plot the milliseconds that a resolver takes, sending as Statsd metrics. By summing up for a total cost of the query, we have an estimation in the worst case on how slow a GraphQL query may respond. The total cost is used as the complexity of a query. If the complexity is greater than a predefined max complexity value, the query needs to fail. The following options are added to the GraphQL _options.validationRules_:
 - [graphql-cost-analysis](https://www.npmjs.com/package/graphql-cost-analysis) for limiting the maximum complexity
@@ -188,12 +188,12 @@ We enabled compression at the express.js app on the ApolloGateway. Also, passing
 &nbsp;
 ### DataLoader: GraphQL Java vs. NodeJS
 
-It is common to fetch the child entities of entities in GraphQL. If implemented uncarefully, it would result in a fanout of many calls. It is better to group calls into a batch call. For this purpose, DataLoader is provided by both the NodeJS implementation and the Java implementation. The NodeJS DataLoader is automatic but depends on the _process.nextTick_ function . It works with fetching entities of entities, but often suffers from fanout when entities nesting level increases. The Java DataLoader on the other hand, provides developers more control.
+It is common to fetch the child entities of entities in GraphQL. If implemented uncarefully, it would result in a fanout of many calls from resolvers. It is better to group calls into a batch call. For this purpose, DataLoader is provided by both the NodeJS implementation and the Java implementation. The NodeJS DataLoader is automatic but depends on the _process.nextTick_ function . It works with fetching entities of entities, but often suffers from fanout when entities nesting level increases. The Java DataLoader on the other hand, provides developers more control.
 
 &nbsp;
 ### Choose a Good Query Root
 
-The undesirable fanout often suggests a problem in schema design. It is tempting to design the GraphQL schema to be a tree from the most abstract to the most detailed types. However, it would mean unnecessary fetching of the abstract entities in every query, just to provide a filter point. It is more practical to start the query root with an entity type having higher cardinality - having more properties to filter on, and let the abstract types to be the properties.
+Besides the accommodation with DataLoader, undesirable fanout in resolvers often suggests a problem in schema design. It is tempting to design the GraphQL schema to be a tree from the most abstract to the most detailed types. However, it would mean unnecessary fetching of the abstract entities in every query, just to provide a filter point. It is more practical to start the query root with an entity type having higher cardinality - having more properties to filter on, and let the abstract types to be the properties.
 
 In our case, a root query with vehicle modelYear is a lot easier to query by providing parameters model_name and year, compared to querying a model entity at the root, and then querying modelYear entities in the next level by filtering by parameter on years.
 
